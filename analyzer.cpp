@@ -1,289 +1,120 @@
 #include <iostream>
 using namespace std;
 
-// Проверяет, делится ли a на b
 bool delyatsya(int a, int b) {
-    return a % b == 0;
+	return a % b == 0;
 }
 
-// Находит и выводит все делители числа n
-void naytiDeliteli(int n) {
-    cout << "Делители числа " << n << ": ";
-    for (int i = 1; i <= n; i++) {
-        if (n % i == 0) {
-            cout << i << " ";
-        }
-    }
-    cout << endl;
+void deliteli(int n) {
+	for (int i = 1; i <= n; i++)
+		if (n % i == 0) cout << i << " ";
+	cout << endl;
 }
 
-// Проверяет, является ли число простым
 bool prostoye(int n) {
-    if (n < 2) return false;
-    for (int i = 2; i * i <= n; i++) {
-        if (n % i == 0) return false;
-    }
-    return true;
+	if (n < 2) return false;
+	for (int i = 2; i * i <= n; i++)
+		if (n % i == 0) return false;
+	return true;
 }
 
-// Наибольший общий делитель (алгоритм Евклида)
 int nod(int a, int b) {
-    while (b != 0) {
-        int temp = b;
-        b = a % b;
-        a = temp;
-    }
-    return a;
+	while (b != 0) { int t = b; b = a % b; a = t; }
+	return a;
 }
 
-// Наименьшее общее кратное
 int nok(int a, int b) {
-    return a / nod(a, b) * b;
+	return a / nod(a, b) * b;
 }
 
-// Выводит числа, кратные k, в диапазоне [ot, do_]
-void kratnyeVDiapazoneFunc(int k, int ot, int do_) {
-    cout << "Числа, кратные " << k << " в диапазоне ["
-         << ot << ", " << do_ << "]: ";
-    bool nashli = false;
-    for (int i = ot; i <= do_; i++) {
-        if (i % k == 0) {
-            cout << i << " ";
-            nashli = true;
-        }
-    }
-    if (!nashli) cout << "(нет)";
-    cout << endl;
+void kratnie(int k, int ot, int do_) {
+	for (int i = ot; i <= do_; i++)
+		if (i % k == 0) cout << i << " ";
+	cout << endl;
 }
 
-// Выводит числа, кратные сразу двум числам, в диапазоне [ot, do_]
-void kratnyeDvumFunc(int k1, int k2, int ot, int do_) {
-    cout << "Числа, кратные " << k1 << " и " << k2
-         << " в диапазоне [" << ot << ", " << do_ << "]: ";
-    bool nashli = false;
-    for (int i = ot; i <= do_; i++) {
-        if (i % k1 == 0 && i % k2 == 0) {
-            cout << i << " ";
-            nashli = true;
-        }
-    }
-    if (!nashli) cout << "(нет)";
-    cout << endl;
+void prostie_v_diap(int ot, int do_) {
+	for (int i = ot; i <= do_; i++)
+		if (prostoye(i)) cout << i << " ";
+	cout << endl;
 }
 
-// Выводит простые числа в диапазоне [ot, do_]
-void prostyeVDiapazoneFunc(int ot, int do_) {
-    cout << "Простые числа в диапазоне [" << ot << ", " << do_ << "]: ";
-    bool nashli = false;
-    for (int i = ot; i <= do_; i++) {
-        if (prostoye(i)) {
-            cout << i << " ";
-            nashli = true;
-        }
-    }
-    if (!nashli) cout << "(нет)";
-    cout << endl;
-}
-
-// Разложение числа на простые множители
 void razlozhenie(int n) {
-    cout << n << " = ";
-    bool pervyi = true;
-    int temp = n;
-    for (int i = 2; i * i <= temp; i++) {
-        while (temp % i == 0) {
-            if (!pervyi) cout << " * ";
-            cout << i;
-            pervyi = false;
-            temp /= i;
-        }
-    }
-    if (temp > 1) {
-        if (!pervyi) cout << " * ";
-        cout << temp;
-    }
-    cout << endl;
+	for (int i = 2; i * i <= n; i++)
+		while (n % i == 0) { cout << i << " "; n /= i; }
+	if (n > 1) cout << n;
+	cout << endl;
 }
 
-// Считает сумму цифр числа
-int summaTsifr(int n) {
-    if (n < 0) n = -n;
-    int s = 0;
-    while (n > 0) {
-        s += n % 10;
-        n /= 10;
-    }
-    return s;
-}
-
-// Проверяет делимость по математическим признакам
-void priznakyDelimosti(int n) {
-    int abs_n = (n < 0) ? -n : n;
-
-    int posled1 = abs_n % 10;         // последняя цифра
-    int posled2 = abs_n % 100;        // последние 2 цифры
-    int posled3 = abs_n % 1000;       // последние 3 цифры
-    int summa   = summaTsifr(abs_n);  // сумма цифр
-
-    // Знакочередующаяся сумма — признак делимости на 11
-    int znakSum = 0, razryad = 0;
-    int temp = abs_n;
-    while (temp > 0) {
-        if (razryad % 2 == 0) znakSum += temp % 10;
-        else                  znakSum -= temp % 10;
-        temp /= 10;
-        razryad++;
-    }
-
-    cout << "\nПризнаки делимости для числа " << n << ":\n";
-    cout << "На  2: " << (posled1 % 2 == 0 ? "ДА " : "НЕТ")
-         << "  (последняя цифра: " << posled1 << ")\n";
-    cout << "На  3: " << (summa % 3 == 0 ? "ДА " : "НЕТ")
-         << "  (сумма цифр = " << summa << ")\n";
-    cout << "На  4: " << (posled2 % 4 == 0 ? "ДА " : "НЕТ")
-         << "  (последние 2 цифры: " << posled2 << ")\n";
-    cout << "На  5: " << ((posled1 == 0 || posled1 == 5) ? "ДА " : "НЕТ")
-         << "  (последняя цифра: " << posled1 << ")\n";
-    cout << "На  6: " << ((posled1 % 2 == 0 && summa % 3 == 0) ? "ДА " : "НЕТ")
-         << "  (делится на 2 и на 3)\n";
-    cout << "На  8: " << (posled3 % 8 == 0 ? "ДА " : "НЕТ")
-         << "  (последние 3 цифры: " << posled3 << ")\n";
-    cout << "На  9: " << (summa % 9 == 0 ? "ДА " : "НЕТ")
-         << "  (сумма цифр = " << summa << ")\n";
-    cout << "На 10: " << (posled1 == 0 ? "ДА " : "НЕТ")
-         << "  (последняя цифра: " << posled1 << ")\n";
-    cout << "На 11: " << (znakSum % 11 == 0 ? "ДА " : "НЕТ")
-         << "  (знакочередующаяся сумма = " << znakSum << ")\n";
+void priznaki(int n) {
+	if (n < 0) n = -n;
+	int last = n % 10;
+	int sum = 0, t = n;
+	while (t > 0) { sum += t % 10; t /= 10; }
+	int alt = 0, pos = 0; t = n;
+	while (t > 0) {
+		if (pos % 2 == 0) alt += t % 10;
+		else alt -= t % 10;
+		t /= 10; pos++;
+	}
+	cout << "На  2: " << (last % 2 == 0 ? "ДА" : "НЕТ") << endl;
+	cout << "На  3: " << (sum % 3 == 0 ? "ДА" : "НЕТ") << "  (сумма цифр = " << sum << ")" << endl;
+	cout << "На  4: " << (n % 4 == 0 ? "ДА" : "НЕТ") << endl;
+	cout << "На  5: " << (last == 0 || last == 5 ? "ДА" : "НЕТ") << endl;
+	cout << "На  6: " << (last % 2 == 0 && sum % 3 == 0 ? "ДА" : "НЕТ") << endl;
+	cout << "На  8: " << (n % 8 == 0 ? "ДА" : "НЕТ") << endl;
+	cout << "На  9: " << (sum % 9 == 0 ? "ДА" : "НЕТ") << "  (сумма цифр = " << sum << ")" << endl;
+	cout << "На 10: " << (last == 0 ? "ДА" : "НЕТ") << endl;
+	cout << "На 11: " << (alt % 11 == 0 ? "ДА" : "НЕТ") << "  (знакочередующаяся сумма = " << alt << ")" << endl;
 }
 
 int main() {
-    int vybor;
-    do {
-        cout << "\n=== Анализатор делимости ===" << endl;
-        cout << "1. Проверить делимость" << endl;
-        cout << "2. Найти делители числа" << endl;
-        cout << "3. Проверить на простоту" << endl;
-        cout << "4. Числа, кратные заданному в диапазоне" << endl;
-        cout << "5. Числа, кратные двум числам одновременно" << endl;
-        cout << "6. Простые числа в диапазоне" << endl;
-        cout << "7. Найти НОД и НОК" << endl;
-        cout << "8. Разложить на простые множители" << endl;
-        cout << "9. Признаки делимости" << endl;
-        cout << "0. Выход" << endl;
-        cout << "Выберите действие: ";
-        cin >> vybor;
+	int v;
+	do {
+		cout << "\n=== Анализатор делимости ===" << endl;
+		cout << "1. Делимость\n2. Делители\n3. Простое?\n";
+		cout << "4. Кратные в диапазоне\n5. Простые в диапазоне\n";
+		cout << "6. НОД и НОК\n7. Разложение на множители\n8. Признаки делимости\n0. Выход\n";
+		cout << "Выбор: ";
+		cin >> v;
 
-        if (vybor == 1) {
-            int a, b;
-            cout << "Введите число: ";
-            cin >> a;
-            cout << "Введите делитель: ";
-            cin >> b;
-            if (b == 0) {
-                cout << "Ошибка: делитель не может быть 0" << endl;
-            } else if (delyatsya(a, b)) {
-                cout << a << " делится на " << b
-                     << " (" << a << " / " << b << " = " << a / b << ")" << endl;
-            } else {
-                cout << a << " НЕ делится на " << b << endl;
-            }
-        }
-        else if (vybor == 2) {
-            int n;
-            cout << "Введите натуральное число: ";
-            cin >> n;
-            if (n <= 0)
-                cout << "Ошибка: введите натуральное число (больше 0)" << endl;
-            else
-                naytiDeliteli(n);
-        }
-        else if (vybor == 3) {
-            int n;
-            cout << "Введите число: ";
-            cin >> n;
-            if (prostoye(n))
-                cout << n << " — простое число" << endl;
-            else
-                cout << n << " — НЕ простое" << endl;
-        }
-        else if (vybor == 4) {
-            int k, ot, do_;
-            cout << "Кратные какому числу искать: ";
-            cin >> k;
-            if (k == 0) {
-                cout << "Ошибка: число не может быть 0" << endl;
-            } else {
-                cout << "Диапазон от: ";
-                cin >> ot;
-                cout << "До: ";
-                cin >> do_;
-                if (ot > do_)
-                    cout << "Ошибка: начало диапазона больше конца" << endl;
-                else
-                    kratnyeVDiapazoneFunc(k, ot, do_);
-            }
-        }
-        else if (vybor == 5) {
-            int k1, k2, ot, do_;
-            cout << "Первое число: ";
-            cin >> k1;
-            cout << "Второе число: ";
-            cin >> k2;
-            if (k1 == 0 || k2 == 0) {
-                cout << "Ошибка: числа не могут быть 0" << endl;
-            } else {
-                cout << "Диапазон от: ";
-                cin >> ot;
-                cout << "До: ";
-                cin >> do_;
-                kratnyeDvumFunc(k1, k2, ot, do_);
-            }
-        }
-        else if (vybor == 6) {
-            int ot, do_;
-            cout << "Диапазон от: ";
-            cin >> ot;
-            cout << "До: ";
-            cin >> do_;
-            if (ot > do_)
-                cout << "Ошибка: начало диапазона больше конца" << endl;
-            else
-                prostyeVDiapazoneFunc(ot, do_);
-        }
-        else if (vybor == 7) {
-            int a, b;
-            cout << "Введите первое число: ";
-            cin >> a;
-            cout << "Введите второе число: ";
-            cin >> b;
-            if (a <= 0 || b <= 0) {
-                cout << "Ошибка: введите натуральные числа (больше 0)" << endl;
-            } else {
-                cout << "НОД(" << a << ", " << b << ") = " << nod(a, b) << endl;
-                cout << "НОК(" << a << ", " << b << ") = " << nok(a, b) << endl;
-            }
-        }
-        else if (vybor == 8) {
-            int n;
-            cout << "Введите натуральное число (больше 1): ";
-            cin >> n;
-            if (n <= 1)
-                cout << "Ошибка: введите число больше 1" << endl;
-            else
-                razlozhenie(n);
-        }
-        else if (vybor == 9) {
-            int n;
-            cout << "Введите число: ";
-            cin >> n;
-            priznakyDelimosti(n);
-        }
-        else if (vybor != 0) {
-            cout << "Неверный выбор. Введите число от 0 до 9." << endl;
-        }
+		if (v == 1) {
+			int a, b;
+			cout << "Число и делитель: "; cin >> a >> b;
+			if (delyatsya(a, b)) cout << a << " делится на " << b << " = " << a/b << endl;
+			else cout << "Не делится" << endl;
+		}
+		else if (v == 2) {
+			int n; cout << "Число: "; cin >> n;
+			deliteli(n);
+		}
+		else if (v == 3) {
+			int n; cout << "Число: "; cin >> n;
+			cout << (prostoye(n) ? "Простое" : "Составное") << endl;
+		}
+		else if (v == 4) {
+			int k, a, b;
+			cout << "Кратные чему, от, до: "; cin >> k >> a >> b;
+			kratnie(k, a, b);
+		}
+		else if (v == 5) {
+			int a, b; cout << "От, до: "; cin >> a >> b;
+			prostie_v_diap(a, b);
+		}
+		else if (v == 6) {
+			int a, b; cout << "Два числа: "; cin >> a >> b;
+			cout << "НОД = " << nod(a, b) << endl;
+			cout << "НОК = " << nok(a, b) << endl;
+		}
+		else if (v == 7) {
+			int n; cout << "Число: "; cin >> n;
+			razlozhenie(n);
+		}
+		else if (v == 8) {
+			int n; cout << "Число: "; cin >> n;
+			priznaki(n);
+		}
+	} while (v != 0);
 
-    } while (vybor != 0);
-
-    cout << "До свидания!" << endl;
-    return 0;
+	return 0;
 }
